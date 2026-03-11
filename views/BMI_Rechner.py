@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 from functions.BMI_Rechner import bmi_rechner, bmi_kategorie
 
@@ -10,9 +11,13 @@ with st.form("BMI_form"):
     button = st.form_submit_button("Berechnen")
 
 if button:
-    bmi = bmi_rechner(gewicht, groesse)
-    kategorie = bmi_kategorie(bmi)
-    st.write(f"Ihr BMI ist: {bmi}")
-    st.write(f"Kategorie: {kategorie}")
+    result = bmi_rechner(gewicht, groesse)
+    st.write(f"Ihr BMI ist: {result['bmi']}")
+    st.write(f'Berechnet am: {result["timestamp"].strftime("%d.%m.%Y %H:%M:%S")}')
+    st.write(f"Kategorie: {result['bmi_kategorie ']}")
     st.balloons()
+    
+    st.session_state['data_df'] = pd.concat([st.session_state['data_df'], pd.DataFrame([result])])
+
+st.dataframe(st.session_state['data_df'])
 
