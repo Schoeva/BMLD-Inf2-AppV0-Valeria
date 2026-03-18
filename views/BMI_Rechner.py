@@ -1,5 +1,7 @@
 import pandas as pd
 import streamlit as st
+from utils.data_manager import DataManager
+
 from functions.BMI_Rechner import bmi_rechner, bmi_kategorie
 
 st.title("BMI Rechner")
@@ -18,6 +20,11 @@ if button:
     st.balloons()
     
     st.session_state['data_df'] = pd.concat([st.session_state['data_df'], pd.DataFrame([result])])
+
+ # --- CODE UPDATE: save data to data manager ---
+    data_manager = DataManager()
+    data_manager.save_user_data(st.session_state['data_df'], 'data.csv')
+    # --- END OF CODE UPDATE ---
 
 st.dataframe(st.session_state['data_df'])
 
